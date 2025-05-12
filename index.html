@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>アンケート</title>
+    <style>
+      body {
+        background-color: #333;
+        color: white;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+      }
+      input {
+        margin: 10px;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>アンケートフォーム</h2>
+    
+    <form id="surveyForm">
+      <label for="nickname">ニックネーム:</label><br>
+      <input type="text" id="nickname" name="nickname" required><br><br>
+
+      <label for="game">好きなゲーム:</label><br>
+      <input type="text" id="game" name="game" required><br><br>
+
+      <input type="button" value="送信" onclick="submitForm()">
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+      function submitForm() {
+        var formData = {
+          nickname: document.getElementById('nickname').value,
+          game: document.getElementById('game').value
+        };
+
+        // VercelからGASにデータをPOST送信
+        fetch('https://script.google.com/macros/s/かえるところ/exec', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('responseMessage').innerText = data;
+        });
+      }
+    </script>
+  </body>
+</html>
